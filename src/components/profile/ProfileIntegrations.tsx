@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState, type CSSProperties } from "react";
 import { VerifiedAccountCheck } from "@/components/profile/VerifiedAccountCheck";
 import { useQuery } from "@tanstack/react-query";
-import { BadgeCheck, QrCode } from "lucide-react";
+import { QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandIcon } from "@/components/integrations/BrandIcon";
 import { integrationById, shownLiveStats, type LiveStatKey } from "@/lib/integrations-catalog";
