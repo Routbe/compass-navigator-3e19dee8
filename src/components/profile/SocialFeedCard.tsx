@@ -13,9 +13,24 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
     staleTime: 5 * 60_000,
   });
   const posts = q.data?.posts ?? [];
-  if (!c.handle || (!q.isLoading && posts.length === 0)) return null;
+  if (!c.handle) return null;
   const horizontal = c.direction === "horizontal";
   const label = c.platform === "bluesky" ? "Bluesky" : "Mastodon";
+  const cardWidth = horizontal ? { flex: `0 0 calc((100% - ${(c.columns - 1) * 0.5}rem) / ${c.columns})` } : {};
+  const profileUrl = c.platform === "bluesky"
+    ? `https://bsky.app/profile/${encodeURIComponent(c.handle)}`
+    : (() => { const [u, host] = c.handle.split("@"); return host ? `https://${host}/@${u}` : null; })();
+  if (!q.isLoading && posts.length === 0) {
+    // Account temporarily unreachable or no public posts: calm fallback instead of an empty gap.
+    return (
+      <section className="w-full lg:col-span-full" aria-label={`${label} — @${c.handle}`}>
+        <div className="rounded-2xl border p-4 text-center text-sm" style={style}>
+          <p className="opacity-70">Posts van {label} zijn nu niet beschikbaar.</p>
+          {profileUrl && <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block underline">@{c.handle} bekijken</a>}
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="w-full lg:col-span-full" aria-label={`${label} — @${c.handle}`}>
       <p className="mb-2 text-center text-[10px] uppercase tracking-wider opacity-70">{label} · @{c.handle}</p>
@@ -24,7 +39,7 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
         style={horizontal ? undefined : { gridTemplateColumns: `repeat(${c.columns}, minmax(0, 1fr))` }}
       >
         {q.isLoading
-          ? Array.from({ length: Math.min(3, c.count) }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-2xl" style={{ ...style, opacity: 0.5 }} />)
+          ? Array.from({ length: Math.min(3, c.count) }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-2xl" style={{ ...style, ...cardWidth, opacity: 0.5 }} />)
           : posts.map((p) => (
               <a
                 key={p.id}
@@ -32,7 +47,7 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block snap-start overflow-hidden rounded-2xl border p-3 text-left text-sm transition-opacity hover:opacity-90"
-                style={{ ...style, ...(horizontal ? { flex: `0 0 calc((100% - ${(c.columns - 1) * 0.5}rem) / ${c.columns})` } : {}) }}
+                style={{ ...style, ...cardWidth }}
               >
                 {p.image && <img src={proxied(p.image) ?? ""} alt="" loading="lazy" className="mb-2 aspect-video w-full rounded-lg object-cover" />}
                 <p className="line-clamp-6 whitespace-pre-line break-words">{p.text}</p>
