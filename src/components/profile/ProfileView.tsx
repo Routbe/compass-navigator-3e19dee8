@@ -728,7 +728,7 @@ export function ProfileView({
                 {!iconOnly && <span className="min-w-0 flex-1 truncate text-center">{b.label}</span>}
                 {(profile.social_links ?? []).filter(link => link.isVerified && link.platform === b.kind && socialHandleKey(link.username) === socialHandleKey(b.value)).slice(0, 1).map(link => (
                   <span key={link.platform} className="inline-flex items-center gap-1 text-emerald-500">
-                    <VerifiedAccountCheck platform={PLATFORM_LABEL[link.platform]} handle={link.username} className="h-4 w-4" theme={t} />
+                    <VerifiedAccountCheck name={profile.display_name || profile.username} platform={PLATFORM_LABEL[link.platform]} handle={link.username} className="h-4 w-4" theme={t} />
                     {link.followerCount !== null && <span className="text-xs">{formatFollowers(link.followerCount)}</span>}
                   </span>
                 ))}
