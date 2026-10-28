@@ -23,7 +23,7 @@ export function GuestbookAccordion({ enabled, onEnabledChange }: { enabled: bool
   const refresh = () => qc.invalidateQueries({ queryKey: ["my-guestbook"] });
 
   return (
-    <details className="border-t border-border pt-4">
+    <details className="rounded-xl border border-border bg-card p-4">
       <summary className="flex min-h-11 cursor-pointer items-center gap-2">
         <StudioSectionIcon kind="guestbook" />
         <span className="min-w-0 flex-1 text-left">
