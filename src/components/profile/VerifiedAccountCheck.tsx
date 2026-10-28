@@ -6,11 +6,14 @@ import { useI18n } from "@/lib/i18n";
 export function VerifiedAccountCheck({
   platform,
   handle,
+  name,
   className = "h-3.5 w-3.5",
   theme,
 }: {
   platform: string;
   handle?: string | null;
+  /** Naam van het geverifieerde lid, zoals bij het blauwe vinkje. */
+  name?: string | null;
   className?: string;
   theme?: { card: string; border: string; text: string; muted: string };
 }) {
@@ -35,7 +38,8 @@ export function VerifiedAccountCheck({
         <div className="flex items-start gap-2">
           <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" aria-hidden />
           <div className="space-y-1">
-            <p className="text-sm font-semibold leading-tight">{t("profile.verifiedAccount")}</p>
+            <p className="text-sm font-semibold leading-tight">{t("profile.verified_badge_title")}</p>
+            {name && <p className="text-sm font-medium">{name}</p>}
             <p className="text-xs font-medium" style={theme ? { color: theme.muted } : undefined}>
               {platform}{handle ? ` · @${handle.replace(/^@/, "")}` : ""}
             </p>
