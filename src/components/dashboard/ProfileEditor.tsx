@@ -1120,6 +1120,7 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            </div>
           )}
           {tab === "links" && (
               <ConversionCoachFab
