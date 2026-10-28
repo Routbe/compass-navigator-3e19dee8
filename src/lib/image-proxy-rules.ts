@@ -21,6 +21,11 @@ export const PROXY_HOSTS = [
   "cdn.masto.host",
   "media.mstdn.social",
   "files.mastodon.online",
+  // Common public photo hosts for gallery image links.
+  "images.unsplash.com",
+  "images.pexels.com",
+  "i.imgur.com",
+  "upload.wikimedia.org",
 ];
 
 export function isAllowedProxyUrl(raw: string, storageHosts: readonly string[] = []): URL | null {
@@ -57,5 +62,12 @@ export function profileImageSrc(url: string | null | undefined): string | null {
       return `/api/public/proxy-image?url=${encodeURIComponent(url)}`;
     }
   } catch { return null; }
+  return proxied(url);
+}
+
+/** Gallery images: first-party uploads stay as-is, external links only via the proxy. */
+export function galleryImageSrc(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith("/api/public/gallery-media?")) return url;
   return proxied(url);
 }

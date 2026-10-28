@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
+import { VerifiedAccountCheck } from "@/components/profile/VerifiedAccountCheck";
 import { useQuery } from "@tanstack/react-query";
-import { BadgeCheck, QrCode } from "lucide-react";
+import { QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandIcon } from "@/components/integrations/BrandIcon";
 import { integrationById, shownLiveStats, type LiveStatKey } from "@/lib/integrations-catalog";
@@ -28,8 +29,10 @@ type Item = {
 type Theme = { card: string; border: string; text: string; muted: string };
 
 /** Live connection cards on a public profile. External images go through the privacy proxy. */
-export function ProfileIntegrations({ handle, theme, mode = null, provider, stats, exclude }: {
-  handle: string; theme: Theme; mode?: "pro" | "social" | null;
+export function ProfileIntegrations({ handle, theme, mode = null, provider, stats, exclude, buttonStyle }: {
+  handle: string; theme: Theme;
+  /** Same button shape as the profile's regular links. */
+  buttonStyle?: CSSProperties; mode?: "pro" | "social" | null;
   /** Live component: render only this provider. */
   provider?: string;
   /** Live component: chosen stats (undefined = all). */
@@ -50,7 +53,7 @@ export function ProfileIntegrations({ handle, theme, mode = null, provider, stat
   return (
     <div className={provider ? "grid w-full gap-2" : "mt-4 grid w-full max-w-sm gap-2"}>
       {items.map((it) => (
-        <Card key={it.provider} item={filterItem(it, provider ? stats : undefined)} theme={theme} />
+        <Card key={it.provider} item={filterItem(it, provider ? stats : undefined)} theme={theme} buttonStyle={buttonStyle} />
       ))}
     </div>
   );
@@ -199,18 +202,18 @@ function VideoCard({ item, theme }: { item: Item; theme: Theme }) {
   );
 }
 
-function Card({ item, theme }: { item: Item; theme: Theme }) {
+function Card({ item, theme, buttonStyle }: { item: Item; theme: Theme; buttonStyle?: CSSProperties }) {
   const { t } = useTranslation();
+  const [showQr, setShowQr] = useState(false);
   if (item.status?.duolingo) return <DuolingoCard item={item} theme={theme} />;
   if (item.status?.chess) return <ChessCard item={item} theme={theme} />;
   if (item.status?.videos?.length) return <VideoCard item={item} theme={theme} />;
   if (item.status?.posts?.length) return <FeedCard item={item} theme={theme} />;
   const meta = integrationById(item.provider);
-  const [showQr, setShowQr] = useState(false);
   const pay = paymentUri(item.provider, item.handle);
   const img = proxied(item.status?.image);
   const body = (
-    <div className="flex items-center gap-3 rounded-2xl p-2.5 pr-4" style={{ background: theme.card, border: `1px solid ${theme.border}`, color: theme.text }}>
+    <div className="flex min-h-12 w-full items-center gap-3 p-2.5 pr-4 transition-opacity hover:opacity-80" style={{ background: theme.card, border: `1px solid ${theme.border}`, color: theme.text, borderRadius: "1rem", ...buttonStyle }}>
       {img ? (
         <img src={img} alt="" loading="lazy" referrerPolicy="no-referrer" className="h-11 w-11 shrink-0 rounded-lg object-cover" />
       ) : (
@@ -221,7 +224,7 @@ function Card({ item, theme }: { item: Item; theme: Theme }) {
       <span className="min-w-0 flex-1 text-left">
         <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider" style={{ color: theme.muted }}>
           {meta?.label ?? item.provider}
-          {item.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary" aria-label={t("profile.verifiedAccount")} />}
+          {item.verified && <VerifiedAccountCheck name={item.status?.title} platform={meta?.label ?? item.provider} handle={item.handle} theme={theme} />}
         </span>
         <span className="block truncate text-sm font-medium">{pay ? t("profile.supportMe") : item.status?.title ?? item.handle}</span>
         <span className="block truncate text-xs" style={{ color: theme.muted }}>

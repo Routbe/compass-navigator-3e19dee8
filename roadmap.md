@@ -1,7 +1,8 @@
 # Roadmap
 - [x] 2026-10-28: e-mailbezorgbaarheid (ROUT-badge, Gmail-actie, disclaimer, platte tekst, geen tracking) gecontroleerd; 95 e-mailtests ok.
 - [x] 2026-10-28: steunpagina-rondleiding wijst nu naar echte velden.
-- [ ] 2026-10-28: rest van de overdrachtslijst (QR-weergave, direct opslaan in Studio, prikbord, vinkjes, galerijteller, vertalingen) — ingelogde controle nodig.
+- [x] 2026-10-28: QR voor alias, direct opslaan, prikbord zichtbaar, groen vinkje-popover, ronde koppelingen, galerijteller+links, feed-fallback + Binnenkort.
+- [ ] Ingelogde browsercontrole van bovenstaande — wacht op ROUT-sessie.
 - [x] Vervolg 2026-10-26: rondleidingen, Studio-paginalijst, profiel-QR, foutbeveiliging en transparantie; publieke Profiel/Steunpagina-knoppen toegevoegd (729 tests ok; ingelogde browsercontrole open).
 - [x] Ontdek 2026-10-25: Google-avatars via privacyproxy hersteld, foto ingebed in PNG én SVG, galerijnaam leesbaar en previewkleuren volgen canvas; 30 tests geslaagd, echt publiek profiel gecontroleerd op desktop/mobiel zonder paginafouten of horizontale overflow.
 - [ ] Vervolg 2026-10-24 09:49: resterende sprinttaken hervatten; loginconsent losmaken van workspace-consoletoegang, rondleidingen afwerken en vraagstories voorbereiden; geen sessieverwijdering of db/99 zonder afzonderlijk akkoord.

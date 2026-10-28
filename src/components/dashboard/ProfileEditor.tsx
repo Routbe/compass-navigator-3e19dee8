@@ -536,6 +536,22 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirty, draft, handleOk, saving, saveError, retryIn]);
 
+  // Direct opslaan bij tab-/paginawissel, verbergen van de pagina of verlaten van de Studio,
+  // zodat een net toegevoegde video of link nooit verloren gaat.
+  const flushRef = useRef<() => void>(() => {});
+  flushRef.current = () => {
+    if (dirty && !saving && handleOk) void save(true);
+  };
+  useEffect(() => { flushRef.current(); }, [tab, pageMode]);
+  useEffect(() => {
+    const onHide = () => { if (document.visibilityState === "hidden") flushRef.current(); };
+    document.addEventListener("visibilitychange", onHide);
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      flushRef.current();
+    };
+  }, []);
+
   // Waarschuwen bij verlaten met niet-opgeslagen wijzigingen.
   useEffect(() => {
     if (!dirty) return;
@@ -948,7 +964,7 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
       <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div className="min-w-0 space-y-6 lg:col-span-7">
           {tab === "links" && (
-            <Accordion type="single" collapsible className="space-y-3">
+            <Accordion type="single" collapsible defaultValue="components_list" className="space-y-3">
               <ProfileBasicInfoAccordion
                 variant={variant}
                 displayName={displayName}

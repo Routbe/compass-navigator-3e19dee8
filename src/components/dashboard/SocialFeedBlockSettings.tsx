@@ -19,6 +19,11 @@ export function SocialFeedBlockSettings({ value, onChange, onTitle }: { value: s
         {(["bluesky", "mastodon"] as const).map((p) => (
           <button key={p} type="button" className={chip(c.platform === p)} onClick={() => update({ platform: p })}>{p === "bluesky" ? "Bluesky" : "Mastodon"}</button>
         ))}
+        {["Instagram", "TikTok", "Threads", "X"].map((name) => (
+          <button key={name} type="button" disabled className={`${chip(false)} cursor-not-allowed opacity-50`} title="Binnenkort">
+            {name} · Binnenkort
+          </button>
+        ))}
       </div>
       <Input
         className="input-field h-9 rounded-xl"

@@ -426,7 +426,7 @@ export function ProfileView({
         {profile.username && <ProfilePageTabs handle={profile.username} theme={t} />}
         {profile.username && <SnapchatProfile handle={profile.username} theme={t} />}
         {profile.username && <NowPlaying handle={profile.username} theme={t} />}
-        {profile.username && <ProfileIntegrations handle={profile.username} theme={t} exclude={liveProviders} />}
+        {profile.username && <ProfileIntegrations handle={profile.username} theme={t} buttonStyle={buttonStyle} exclude={liveProviders} />}
         {profile.username && usesSectionFallback(profile.blocks, "widget:youtube") && <ProfileYouTubeCard handle={profile.username} theme={t} />}
         {profile.username && <TipJarButton handle={profile.username} theme={t} />}
         <ProfilePassport handle={profile.username} theme={t} />
@@ -590,7 +590,7 @@ export function ProfileView({
             ) : b.kind === "widget:youtube" ? (
               profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileYouTubeCard handle={profile.username} theme={t} /></div> : null
             ) : b.kind === "live" ? (
-              profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileIntegrations handle={profile.username} theme={t} provider={b.value} stats={b.stats} /></div> : null
+              profile.username ? <div key={b.id} className="w-full lg:col-span-full"><ProfileIntegrations handle={profile.username} theme={t} buttonStyle={buttonStyle} provider={b.value} stats={b.stats} /></div> : null
             ) : b.kind === "widget:reach" ? (
               profile.show_total_reach && (profile.total_reach_count ?? 0) > 0 ? <div key={b.id} className="flex w-full items-center justify-center gap-1.5 text-sm lg:col-span-full"><Users className="h-4 w-4" aria-hidden />{formatReach(profile.total_reach_count ?? 0)}  {tx("profile.reachLabel")} </div> : null
             ) : b.kind === "spacer" ? (
@@ -728,7 +728,7 @@ export function ProfileView({
                 {!iconOnly && <span className="min-w-0 flex-1 truncate text-center">{b.label}</span>}
                 {(profile.social_links ?? []).filter(link => link.isVerified && link.platform === b.kind && socialHandleKey(link.username) === socialHandleKey(b.value)).slice(0, 1).map(link => (
                   <span key={link.platform} className="inline-flex items-center gap-1 text-emerald-500">
-                    <VerifiedAccountCheck platform={PLATFORM_LABEL[link.platform]} handle={link.username} className="h-4 w-4" theme={t} />
+                    <VerifiedAccountCheck name={profile.display_name || profile.username} platform={PLATFORM_LABEL[link.platform]} handle={link.username} className="h-4 w-4" theme={t} />
                     {link.followerCount !== null && <span className="text-xs">{formatFollowers(link.followerCount)}</span>}
                   </span>
                 ))}

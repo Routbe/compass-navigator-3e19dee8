@@ -19,13 +19,15 @@ describe("standalone profile QR save", () => {
     const style = { fgColor: "#112233", bgColor: "transparent", cornerStyle: "dots" as const, emblem: false, bgGradient: "linear-gradient(135deg, #ffffff, #112233)" };
     await savePublishedProfileQr("owner", style);
     expect(state.transaction).toHaveBeenCalledTimes(1);
-    expect(state.calls).toHaveLength(2);
+    expect(state.calls).toHaveLength(3);
     for (const call of state.calls) {
       expect(call.values).toContain("owner");
       expect(call.values).toContain(JSON.stringify(style));
     }
     expect(state.calls[1]?.query).toContain("revision = revision + 1");
-    expect(state.calls[1]?.query).toContain("space = 'verified'");
+    // Root and alias drafts both get the QR, and the alias profile shows it too.
+    expect(state.calls[1]?.query).not.toContain("space = 'verified'");
+    expect(state.calls[2]?.query).toContain("alias_profiles");
     expect(state.calls[1]?.query).toContain("published_revision = case when published_revision = revision");
   });
   it("does not report success for a missing profile", async () => {

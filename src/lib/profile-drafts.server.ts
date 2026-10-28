@@ -103,7 +103,12 @@ export async function savePublishedProfileQr(userId: string, style: ProfileQrSty
           revision = revision + 1,
           published_revision = case when published_revision = revision then revision + 1 else published_revision end,
           updated_at = now()
-      where user_id = ${userId} and space = 'verified'`,
+      where user_id = ${userId}`,
+    // Alias profiles (/u/handle) keep their own display_prefs; the profile QR applies to both.
+    sql`update public.alias_profiles
+      set display_prefs = jsonb_set(coalesce(display_prefs, '{}'::jsonb), '{qrSettings}', ${encoded}::jsonb, true),
+          updated_at = now()
+      where user_id = ${userId}`,
   ]);
   if (!results[0]?.length) throw new Error("profile_not_found");
 }
