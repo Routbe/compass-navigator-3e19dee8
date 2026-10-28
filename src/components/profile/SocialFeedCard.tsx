@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getSocialFeed } from "@/lib/social-feed.functions";
 import { parseSocialFeedConfig } from "@/lib/social-feed";
@@ -6,6 +7,7 @@ import { proxied } from "@/lib/image-proxy-rules";
 /** Automatically loaded Bluesky/Mastodon posts, as a grid or horizontal carousel. */
 export function SocialFeedCard({ value, style }: { value: string; style?: React.CSSProperties }) {
   const c = parseSocialFeedConfig(value);
+  const { t } = useTranslation();
   const q = useQuery({
     queryKey: ["social-feed", c.platform, c.handle, c.count],
     queryFn: () => getSocialFeed({ data: { platform: c.platform, handle: c.handle, count: c.count } }),
@@ -25,8 +27,8 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
     return (
       <section className="w-full lg:col-span-full" aria-label={`${label} — @${c.handle}`}>
         <div className="rounded-2xl border p-4 text-center text-sm" style={style}>
-          <p className="opacity-70">Posts van {label} zijn nu niet beschikbaar.</p>
-          {profileUrl && <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block underline">@{c.handle} bekijken</a>}
+          <p className="opacity-70">{t("profile.socialFeed.unavailable", { platform: label })}</p>
+          {profileUrl && <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block underline">{t("profile.socialFeed.view", { handle: c.handle })}</a>}
         </div>
       </section>
     );
@@ -49,7 +51,7 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
                 className="block snap-start overflow-hidden rounded-2xl border p-3 text-left text-sm transition-opacity hover:opacity-90"
                 style={{ ...style, ...cardWidth }}
               >
-                {p.image && <img src={proxied(p.image) ?? ""} alt="" loading="lazy" className="mb-2 aspect-video w-full rounded-lg object-cover" />}
+                {p.image && proxied(p.image) && <img src={proxied(p.image) ?? undefined} alt="" loading="lazy" className="mb-2 aspect-video w-full rounded-lg object-cover" />}
                 <p className="line-clamp-6 whitespace-pre-line break-words">{p.text}</p>
                 {p.createdAt && <p className="mt-2 text-[10px] opacity-60">{new Date(p.createdAt).toLocaleDateString()}</p>}
               </a>

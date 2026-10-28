@@ -1504,5 +1504,7 @@
     "bioHint": "First add your ROUT profile link to your bio. We check it on the platform.",
     "failed": "Connection or saving failed. Check your bio and try again.",
     "snapHint": "Snapchat does not share a username, so connecting cannot verify the entered handle."
-  }
+  },
+  "profile.socialFeed.unavailable": "{{platform}} posts aren't available right now.",
+  "profile.socialFeed.view": "View @{{handle}}"
 }

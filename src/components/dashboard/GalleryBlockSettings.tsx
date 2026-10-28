@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ImagePlus, Trash2 } from "lucide-react";
 
@@ -27,13 +28,14 @@ export function GalleryBlockSettings({
   onTitle: (label: string) => void;
 }) {
   const [dialog, setDialog] = useState(false);
+  const { t } = useTranslation();
   const [urlInput, setUrlInput] = useState("");
   const [urlError, setUrlError] = useState("");
   const addUrl = () => {
     const url = urlInput.trim();
     // Only https links from hosts the privacy proxy may load; anything else would show broken.
     if (!proxied(url)) {
-      setUrlError("Deze link kan niet getoond worden. Gebruik een https-link van een ondersteunde fotodienst, of upload de foto.");
+      setUrlError(t("studio.gallery.linkError"));
       return;
     }
     setUrlError("");
@@ -113,13 +115,13 @@ export function GalleryBlockSettings({
       <div className="flex gap-1.5">
         <Input
           className="input-field h-9 min-w-0 flex-1 rounded-xl"
-          placeholder="https://… afbeeldingslink"
+          placeholder={t("studio.gallery.linkPlaceholder")}
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addUrl(); } }}
-          aria-label="Afbeeldingslink"
+          aria-label={t("studio.gallery.linkLabel")}
         />
-        <button type="button" onClick={addUrl} disabled={!urlInput.trim() || config.items.length >= GALLERY_MAX_ITEMS} className="h-9 shrink-0 rounded-xl border border-border px-3 text-[11px] font-medium hover:bg-muted disabled:opacity-50">Link toevoegen</button>
+        <button type="button" onClick={addUrl} disabled={!urlInput.trim() || config.items.length >= GALLERY_MAX_ITEMS} className="h-9 shrink-0 rounded-xl border border-border px-3 text-[11px] font-medium hover:bg-muted disabled:opacity-50">{t("studio.gallery.addLink")}</button>
       </div>
       {urlError && <p className="text-[10px] text-destructive">{urlError}</p>}
       <button
@@ -128,10 +130,10 @@ export function GalleryBlockSettings({
         disabled={config.items.length >= GALLERY_MAX_ITEMS}
         className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-border text-[11px] font-medium hover:bg-muted disabled:opacity-50"
       >
-        <ImagePlus className="h-3.5 w-3.5" /> Foto uploaden
+        <ImagePlus className="h-3.5 w-3.5" /> {t("studio.gallery.upload")}
       </button>
       <p className="text-[10px] text-muted-foreground">
-        {config.items.length}/{GALLERY_MAX_ITEMS} foto's · {galleryUploadCount(config.items)} van {LIFETIME_MAX_FILES} gratis geüploade foto's gebruikt — afbeeldingslinks tellen niet mee.
+        {t("studio.gallery.quota", { count: config.items.length, max: GALLERY_MAX_ITEMS, used: galleryUploadCount(config.items), limit: LIFETIME_MAX_FILES })}
       </p>
 
       <GalleryImageDialog open={dialog} onOpenChange={setDialog} onAdd={addItem} />

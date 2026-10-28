@@ -527,11 +527,19 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
     setDirty(true);
   }, [draft, loading]);
 
+  // A newly added or removed component (video, link, widget) is saved without the usual pause.
+  const flushSoon = useRef(false);
+  const blockCount = useRef<number | null>(null);
+  useEffect(() => {
+    if (blockCount.current !== null && blockCount.current !== blocks.length) flushSoon.current = true;
+    blockCount.current = blocks.length;
+  }, [blocks.length]);
+
   // Opslaan één tegelijk; bij fout opnieuw proberen met oplopende pauze.
   useEffect(() => {
     if (!dirty || saving || !handleOk) return;
-    const wait = saveError ? Math.min(30000, 2000 * 2 ** (failCount.current - 1)) : 500;
-    const id = setTimeout(() => void save(true), wait);
+    const wait = saveError ? Math.min(30000, 2000 * 2 ** (failCount.current - 1)) : flushSoon.current ? 0 : 500;
+    const id = setTimeout(() => { flushSoon.current = false; void save(true); }, wait);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirty, draft, handleOk, saving, saveError, retryIn]);
@@ -964,6 +972,8 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
       <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         <div className="min-w-0 space-y-6 lg:col-span-7">
           {tab === "links" && (
+            // Leaving a link title or URL field saves straight away.
+            <div onBlurCapture={() => flushRef.current()}>
             <Accordion type="single" collapsible defaultValue="components_list" className="space-y-3">
               <ProfileBasicInfoAccordion
                 variant={variant}
@@ -1110,6 +1120,7 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            </div>
           )}
           {tab === "links" && (
               <ConversionCoachFab

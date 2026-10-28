@@ -50,13 +50,16 @@ export const getSocialFeed = createServerFn({ method: "GET" })
         if (!acct.id || !/^\w+$/.test(acct.id)) return { posts: [] };
         const res = await fetch(`${base}/accounts/${acct.id}/statuses?limit=${data.count}&exclude_replies=true&exclude_reblogs=true`, { signal: AbortSignal.timeout(6000), redirect: "error" });
         if (!res.ok) return { posts: [] };
-        const list = (await res.json()) as { id: string; content?: string; url?: string; created_at?: string }[];
+        const list = (await res.json()) as { id: string; content?: string; url?: string; created_at?: string; sensitive?: boolean; media_attachments?: { type?: string; preview_url?: string }[] }[];
         posts = list.map((s) => ({
           id: s.id,
           text: htmlToText(s.content ?? "").slice(0, 600),
           url: typeof s.url === "string" && s.url.startsWith(`https://${parts.instance}/`) ? s.url : `https://${parts.instance}/@${parts.user}`,
           createdAt: s.created_at ?? "",
-          image: null,
+          // First public, non-sensitive photo; the card loads it only through the privacy proxy.
+          image: !s.sensitive
+            ? (s.media_attachments ?? []).find((m) => m.type === "image" && typeof m.preview_url === "string" && m.preview_url.startsWith("https://"))?.preview_url ?? null
+            : null,
         }));
       }
     } catch (error) {

@@ -1504,5 +1504,7 @@
     "bioHint": "Füge deinen ROUT-Profillink zur Biografie hinzu. Wir prüfen ihn auf der Plattform.",
     "failed": "Verbindung oder Speichern fehlgeschlagen. Prüfe deine Biografie und versuche es erneut.",
     "snapHint": "Snapchat teilt keinen Benutzernamen: Eine Verbindung bestätigt daher nicht den eingegebenen Namen."
-  }
+  },
+  "profile.socialFeed.unavailable": "{{platform}}-Beiträge sind gerade nicht verfügbar.",
+  "profile.socialFeed.view": "@{{handle}} ansehen"
 }

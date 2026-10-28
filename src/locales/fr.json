@@ -1504,5 +1504,7 @@
     "bioHint": "Ajoutez le lien de votre profil ROUT à votre biographie. Nous le vérifions sur la plateforme.",
     "failed": "Échec de connexion ou d’enregistrement. Vérifiez votre biographie et réessayez.",
     "snapHint": "Snapchat ne partage pas de nom d’utilisateur : la connexion ne vérifie donc pas le pseudo saisi."
-  }
+  },
+  "profile.socialFeed.unavailable": "Les publications {{platform}} ne sont pas disponibles pour le moment.",
+  "profile.socialFeed.view": "Voir @{{handle}}"
 }

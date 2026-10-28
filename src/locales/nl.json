@@ -1504,5 +1504,7 @@
     "bioHint": "Plaats eerst de link naar je ROUT-profiel in je bio. We controleren deze op het platform.",
     "failed": "Koppelen of opslaan mislukt. Controleer je bio en probeer opnieuw.",
     "snapHint": "Snapchat deelt geen gebruikersnaam: koppelen bewijst daarom niet de ingevoerde handle."
-  }
+  },
+  "profile.socialFeed.unavailable": "Posts van {{platform}} zijn nu niet beschikbaar.",
+  "profile.socialFeed.view": "@{{handle}} bekijken"
 }
