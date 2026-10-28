@@ -21,6 +21,12 @@ export const PROXY_HOSTS = [
   "cdn.masto.host",
   "media.mstdn.social",
   "files.mastodon.online",
+  "media.mastodon.online",
+  "files.mas.to",
+  "media.infosec.exchange",
+  "files.fosstodon.org",
+  "cdn.fosstodon.org",
+  "media.chaos.social",
   // Common public photo hosts for gallery image links.
   "images.unsplash.com",
   "images.pexels.com",

@@ -22,6 +22,12 @@ export const uploadGalleryMedia = createServerFn({ method: "POST" })
     if (bytes > GALLERY_MAX_BYTES) return { ok: false, message: "Houd de foto onder 10 MB." };
 
     const { sql } = await import("@/lib/neon");
+    // Free storage: uploaded gallery photos are capped per member; image links never count.
+    const { LIFETIME_MAX_FILES } = await import("@/lib/asset-retention");
+    const used = (await sql`select count(*)::int as n from public.gallery_objects where user_id = ${context.userId}`) as { n: number }[];
+    if (Number(used[0]?.n ?? 0) >= LIFETIME_MAX_FILES) {
+      return { ok: false, message: `Je gebruikt al ${LIFETIME_MAX_FILES} gratis foto's. Verwijder er een of voeg een afbeeldingslink toe.` };
+    }
     const ext =
       (data.ext || "jpg")
         .toLowerCase()
