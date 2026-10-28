@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { parseSocialFeedConfig, serializeSocialFeedConfig, SOCIAL_FEED_MAX_COLUMNS, SOCIAL_FEED_MAX_COUNT, type SocialFeedConfig } from "@/lib/social-feed";
 
@@ -6,6 +7,7 @@ const chip = (on: boolean) =>
 
 /** Studio panel for the automatic Bluesky/Mastodon post feed. */
 export function SocialFeedBlockSettings({ value, onChange, onTitle }: { value: string; onChange: (v: string) => void; onTitle: (l: string) => void }) {
+  const { t } = useTranslation();
   const c = parseSocialFeedConfig(value);
   const update = (patch: Partial<SocialFeedConfig>) => {
     const next = { ...c, ...patch };
