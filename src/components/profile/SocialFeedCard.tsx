@@ -49,7 +49,7 @@ export function SocialFeedCard({ value, style }: { value: string; style?: React.
                 className="block snap-start overflow-hidden rounded-2xl border p-3 text-left text-sm transition-opacity hover:opacity-90"
                 style={{ ...style, ...cardWidth }}
               >
-                {p.image && <img src={proxied(p.image) ?? ""} alt="" loading="lazy" className="mb-2 aspect-video w-full rounded-lg object-cover" />}
+                {p.image && proxied(p.image) && <img src={proxied(p.image) ?? undefined} alt="" loading="lazy" className="mb-2 aspect-video w-full rounded-lg object-cover" />}
                 <p className="line-clamp-6 whitespace-pre-line break-words">{p.text}</p>
                 {p.createdAt && <p className="mt-2 text-[10px] opacity-60">{new Date(p.createdAt).toLocaleDateString()}</p>}
               </a>
