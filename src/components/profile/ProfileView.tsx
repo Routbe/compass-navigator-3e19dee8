@@ -256,7 +256,7 @@ export function ProfileView({
               {username && <span>@{username.replace(/^@/, "")}</span>}
               {followers && <span>{followers}  {tx("profile.followersLabel")} </span>}
             </a>
-            <VerifiedAccountCheck platform={PLATFORM_LABEL[link.platform]} handle={username} className="h-3 w-3" theme={t} />
+            <VerifiedAccountCheck name={profile.display_name || profile.username} platform={PLATFORM_LABEL[link.platform]} handle={username} className="h-3 w-3" theme={t} />
           </span>
         );
       })}
@@ -424,7 +424,7 @@ export function ProfileView({
           <ProfilePassport handle={profile.username} theme={t} compact />
         </h1>
         {profile.username && <ProfilePageTabs handle={profile.username} theme={t} />}
-        {profile.username && <SnapchatProfile handle={profile.username} theme={t} />}
+        {profile.username && <SnapchatProfile handle={profile.username} theme={t} buttonStyle={buttonStyle} ownerName={profile.display_name || profile.username} />}
         {profile.username && <NowPlaying handle={profile.username} theme={t} />}
         {profile.username && <ProfileIntegrations handle={profile.username} theme={t} buttonStyle={buttonStyle} exclude={liveProviders} />}
         {profile.username && usesSectionFallback(profile.blocks, "widget:youtube") && <ProfileYouTubeCard handle={profile.username} theme={t} />}
