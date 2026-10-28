@@ -121,7 +121,7 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
       <button type="button" className="text-xs text-muted-foreground underline-offset-4 hover:underline" onClick={() => setTour(true)}>
         Rondleiding opnieuw bekijken
       </button>
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border p-3">
+      <div data-tour="tip-status" className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border p-3">
         <code className="text-xs">rout.be/{handle}/tip</code>
         <div className="flex items-center gap-3">
           <Button asChild size="sm" variant="outline" className="gap-1.5">
@@ -148,7 +148,7 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
         </div>
       </div>
 
-      <section className="space-y-3">
+      <section data-tour="tip-bank" className="space-y-3">
         <h4 className="text-sm font-medium">Bankrekening (SEPA / EPC-QR)</h4>
         <p className="text-xs text-muted-foreground">
           Bezoekers scannen een QR-code met hun eigen bank-app. Geld gaat rechtstreeks naar je rekening — geen API, geen kosten, ROUT raakt het geld niet aan.
@@ -167,7 +167,7 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
         </div>
       </section>
 
-      <section className="space-y-3">
+      <section data-tour="tip-amounts" className="space-y-3">
         <h4 className="text-sm font-medium">Bedragen</h4>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
@@ -188,7 +188,7 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
         </div>
       </section>
 
-      <section className="space-y-3">
+      <section data-tour="tip-photos" className="space-y-3">
         <h4 className="text-sm font-medium">Foto's ({s.imageUrls.length}/{TIP_MAX_IMAGES})</h4>
         <div className="grid grid-cols-3 gap-2">
           {s.imageUrls.map((u) => (
@@ -247,7 +247,7 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
 
       <TipExtrasPanel settings={s} onChange={(patch) => setS((p) => (p ? { ...p, ...patch } : p))} />
 
-      <Button onClick={() => void onSave()} disabled={busy || !ibanOk}>
+      <Button data-tour="tip-save" onClick={() => void onSave()} disabled={busy || !ibanOk}>
         {busy && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />} Opslaan
       </Button>
 
