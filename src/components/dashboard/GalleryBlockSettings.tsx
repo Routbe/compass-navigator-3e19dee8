@@ -11,7 +11,10 @@ import {
   type GalleryConfig,
   type GalleryItem,
   newGalleryItemId,
+  galleryUploadCount,
 } from "@/lib/gallery";
+import { LIFETIME_MAX_FILES } from "@/lib/asset-retention";
+import { proxied } from "@/lib/image-proxy-rules";
 
 /** Studio-paneel voor het native `media_gallery`-component. */
 export function GalleryBlockSettings({
@@ -25,9 +28,15 @@ export function GalleryBlockSettings({
 }) {
   const [dialog, setDialog] = useState(false);
   const [urlInput, setUrlInput] = useState("");
+  const [urlError, setUrlError] = useState("");
   const addUrl = () => {
     const url = urlInput.trim();
-    if (!/^https:\/\/[^\s]+$/i.test(url)) return;
+    // Only https links from hosts the privacy proxy may load; anything else would show broken.
+    if (!proxied(url)) {
+      setUrlError("Deze link kan niet getoond worden. Gebruik een https-link van een ondersteunde fotodienst, of upload de foto.");
+      return;
+    }
+    setUrlError("");
     addItem({ id: newGalleryItemId(), url, alt: "", caption: "" } as GalleryItem);
     setUrlInput("");
   };
@@ -112,6 +121,7 @@ export function GalleryBlockSettings({
         />
         <button type="button" onClick={addUrl} disabled={!urlInput.trim() || config.items.length >= GALLERY_MAX_ITEMS} className="h-9 shrink-0 rounded-xl border border-border px-3 text-[11px] font-medium hover:bg-muted disabled:opacity-50">Link toevoegen</button>
       </div>
+      {urlError && <p className="text-[10px] text-destructive">{urlError}</p>}
       <button
         type="button"
         onClick={() => setDialog(true)}
@@ -121,7 +131,7 @@ export function GalleryBlockSettings({
         <ImagePlus className="h-3.5 w-3.5" /> Foto uploaden
       </button>
       <p className="text-[10px] text-muted-foreground">
-        {config.items.length}/{GALLERY_MAX_ITEMS} foto's — links zijn onbeperkt, geüploade foto's tellen mee voor je gratis opslag.
+        {config.items.length}/{GALLERY_MAX_ITEMS} foto's · {galleryUploadCount(config.items)} van {LIFETIME_MAX_FILES} gratis geüploade foto's gebruikt — afbeeldingslinks tellen niet mee.
       </p>
 
       <GalleryImageDialog open={dialog} onOpenChange={setDialog} onAdd={addItem} />
