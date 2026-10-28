@@ -103,7 +103,7 @@ export function isValidImageUrl(raw: string): boolean {
   if (value.startsWith("/api/public/gallery-media?")) return true;
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    return url.protocol === "https:";
   } catch {
     return false;
   }
@@ -115,4 +115,9 @@ export function galleryLinkHref(item: GalleryItem): string | undefined {
   if (!raw) return undefined;
   if (/^https?:\/\//i.test(raw)) return raw;
   return `https://${raw.replace(/^\/+/, "")}`;
+}
+
+/** Uploaded photos count toward free storage; image links never do. */
+export function galleryUploadCount(items: readonly { url: string }[]): number {
+  return items.filter((item) => item.url.startsWith("/api/public/gallery-media?")).length;
 }

@@ -1,3 +1,4 @@
+import { galleryImageSrc } from "@/lib/image-proxy-rules";
 import { useTranslation } from "react-i18next";
 import { useState, type CSSProperties } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -19,7 +20,7 @@ function GalleryImage({
 
   const image = (
     <img
-      src={item.url}
+      src={galleryImageSrc(item.url) ?? undefined}
       alt={item.alt || item.caption || ""}
       loading="lazy"
       decoding="async"
@@ -132,7 +133,7 @@ export function GalleryCard({ config, style }: { config: GalleryConfig; style: C
                   )}
                 >
                   <img
-                    src={item.url}
+                    src={galleryImageSrc(item.url) ?? undefined}
                     alt=""
                     loading="lazy"
                     className="h-full w-full object-cover"
@@ -152,7 +153,7 @@ export function GalleryCard({ config, style }: { config: GalleryConfig; style: C
           {lightbox && (
             <figure className="overflow-hidden rounded-2xl">
               <img
-                src={lightbox.url}
+                src={galleryImageSrc(lightbox.url) ?? undefined}
                 alt={lightbox.alt || lightbox.caption || ""}
                 className="max-h-[80vh] w-full object-contain"
               />
