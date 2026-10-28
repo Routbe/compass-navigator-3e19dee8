@@ -20,8 +20,8 @@ export function SocialFeedBlockSettings({ value, onChange, onTitle }: { value: s
           <button key={p} type="button" className={chip(c.platform === p)} onClick={() => update({ platform: p })}>{p === "bluesky" ? "Bluesky" : "Mastodon"}</button>
         ))}
         {["Instagram", "TikTok", "Threads", "X"].map((name) => (
-          <button key={name} type="button" disabled className={`${chip(false)} cursor-not-allowed opacity-50`} title="Binnenkort">
-            {name} · Binnenkort
+          <button key={name} type="button" disabled className={`${chip(false)} cursor-not-allowed opacity-50`} title={t("studio.socialFeed.soon")}>
+            {name} · {t("studio.socialFeed.soon")}
           </button>
         ))}
       </div>
